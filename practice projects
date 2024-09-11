@@ -1,0 +1,9 @@
+%dw 2.0
+output application/csv separator=";"
+var data = read(payload as String, "application/csv", {separator: ",", header: true})
+---
+data map ((row) -> 
+    row mapObject ((value, key) -> {
+        (key): if (value == null or value == "NA") "" else if (key as String == "Company") "ONICL_" ++ value else value
+    })
+)
